@@ -36,16 +36,16 @@ while is_game_on:
 
     # detect collision with wall
     if snaky.head.xcor() > 280 or snaky.head.xcor() < -280 or snaky.head.ycor() > 280 or snaky.head.ycor() < -280:
-        is_game_on = False
+        score.reset()
+        snaky.reset()
+        score.update_scoreboard()
 
     # detect collision with own tail
     for segment in snaky.segments[1:]:
         if snaky.head.distance(segment) < 10:
-            is_game_on = False
-            score.game_over()
+            score.reset()
+            snaky.reset()
+            score.update_scoreboard()
 
-score.game_over()
-
-
-
+# score.game_over()
 screen.exitonclick()
