@@ -26,7 +26,6 @@ screen.onkeypress(l_paddle.move_down, 's')
 scoreboard = Scoreboard()
 
 is_game_on = True
-# sleep_time = 0.05
 
 while is_game_on:
     time.sleep(ball.move_speed)
