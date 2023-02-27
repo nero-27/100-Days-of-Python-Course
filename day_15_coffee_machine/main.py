@@ -43,10 +43,8 @@ def is_resources_enough(coffee_ingredients):
             return False
     return True
 
-
 def calculate_change(coffee_price, user_paid):
     return user_paid-coffee_price
-
 
 def is_transaction_successful(coffee_price, user_paid):
     if user_paid > coffee_price or user_paid == coffee_price:
