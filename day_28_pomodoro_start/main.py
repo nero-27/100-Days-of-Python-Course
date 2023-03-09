@@ -86,10 +86,11 @@ window.config(padx=100, pady=50, bg=YELLOW)
 canvas = Canvas(width=200, height=224, bg=YELLOW, highlightthickness=0)
 tomato_img = PhotoImage(file='tomato.png')
 timer_label = Label(text="TIMER", fg=GREEN, font=(FONT_NAME, 20, "bold"))
-canvas.create_image(100, 112, image=tomato_img)
-timer_text = canvas.create_text(103, 130, text="00:00", font=(FONT_NAME, 20, "bold"), fill="white")
-canvas.grid(column=2, row=2)
 timer_label.grid(column=2, row=0)
+canvas.create_image(100, 112, image=tomato_img)
+canvas.grid(column=2, row=2)
+timer_text = canvas.create_text(103, 130, text="00:00", font=(FONT_NAME, 20, "bold"), fill="white")
+
 
 
 start_button = Button(text="Start", command=start, highlightthickness=0)

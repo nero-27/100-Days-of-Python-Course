@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from random import randint, choice, shuffle
 import pyperclip
+import json
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
@@ -35,7 +36,14 @@ def save_password():
     website_ent = website_entry.get()
     email_ent = email_entry.get()
     password_ent = password_entry.get()
-    entry = f"{website_ent} | {email_ent} | {password_ent}"
+
+    json_data = {
+        website_ent: {
+            'email': email_ent,
+            'password': password_ent,
+        },
+    }
+    # entry = f"{website_ent} | {email_ent} | {password_ent}"
 
     is_not_empty = len(website_ent) == 0 or len(password_ent) == 0
     if is_not_empty:
@@ -44,13 +52,42 @@ def save_password():
         is_ok = messagebox.askokcancel(title=website_ent, message=f"You entered:\n Website: {website_ent} \n Password: {password_ent} \n Would you like to save?")
 
         if is_ok:
-            website_entry.delete(0, END)
-            # email_entry.delete(0, END)
-            password_entry.delete(0, END)
-            website_entry.focus()
-            with open('password_manager.txt', 'a') as pm:
-                pm.write(f"{entry}\n")
+            try:
+                with open('password_manager.json', 'r') as pm:
+                    # read old data
+                    data = json.load(pm)
+                    print(data)
+            except FileNotFoundError:
+                with open('password_manager.json', 'w') as pm:
+                    # write new data to json file
+                    json.dump(json_data, pm, indent=4)
+            else:
+                # update old data with new data
+                data.update(json_data)
+                print(data)
+                with open('password_manager.json', 'w') as pm:
+                    # write new data to json file
+                    json.dump(data, pm, indent=4)
+            finally:
+                website_entry.delete(0, END)
+                password_entry.delete(0, END)
 
+
+def search():
+    website_ent = website_entry.get()
+
+    try:
+        with open("password_manager.json", 'r') as pm:
+            data = json.load(pm)
+    except FileNotFoundError:
+        messagebox.showerror(title="Not found", message="File not found. Add a new entry.")
+    else:
+        if website_ent in data.keys():
+            email_data = data[website_ent]['email']
+            password_data = data[website_ent]['password']
+            messagebox.showinfo(title=website_ent, message=f"{email_data}\n{password_data}")
+        else:
+            messagebox.showerror(title="Not found", message="Website not found")
 # ---------------------------- UI SETUP ------------------------------- #
 
 
@@ -89,6 +126,8 @@ generate_password_button = Button(text="Generate Password", command=generate_pas
 generate_password_button.grid(column=2, row=3)
 add_button = Button(text="Add", width=36, command=save_password)
 add_button.grid(column=1, row=4, columnspan=2)
+search_button = Button(text="Search", command=search)
+search_button.grid(row=1, column=2)
 
 
 
